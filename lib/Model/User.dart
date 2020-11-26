@@ -2,19 +2,21 @@ class User {
   int id;
   String name;
   String email;
+  String image;
 
-  User(int id, String name, String email) {
+  User(int id, String name, String email, String image) {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.image = image;
   }
 
-  User.fromJson(Map json)
-      : id = json['id'],
-        name = json['name'],
-        email = json['email'];
+  User.fromJson(Map<String, dynamic> json)
+      : name = json["name"]["first"],
+        email = json["name"]["last"],
+        image = json["picture"]["medium"];
 
-  Map toJson() {
-    return {'id': id, 'name': name, 'email': email};
+  Map<String, dynamic> toJson() {
+    return {'name': name, 'email': email, 'image': image};
   }
 }
