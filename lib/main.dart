@@ -55,8 +55,6 @@ class _MyListScreenState extends State {
 
   @override
   Widget build(context) {
-    final aUsuarios = Provider.of<ListaUsuarios>(context);
-
     return Scaffold(
         appBar: AppBar(
           title: Text("User List"),
@@ -66,12 +64,8 @@ class _MyListScreenState extends State {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                //aUsuarios.guardarLista(users[index]);
                 _irAlDetalle(users[index]);
               },
-              //{
-              //   _irAlDetalle(users[index]);
-              // },
               child: Card(
                 child: ListTile(
                   leading: Image.network(users[index].image),
@@ -87,8 +81,9 @@ class _MyListScreenState extends State {
   }
 
   void _irAlDetalle(User user) {
-    final aUsuarios = Provider.of<ListaUsuarios>(context);
+    final aUsuarios = Provider.of<ListaUsuarios>(context, listen: false);
 
+    print(user);
     aUsuarios.guardarLista(user);
 
     Navigator.of(context)
@@ -108,14 +103,21 @@ class Pruebas2 extends State {
   Widget build(context) {
     final aUsuarios = Provider.of<ListaUsuarios>(context);
 
-    print(aUsuarios.aUsuarios);
     return Scaffold(
         appBar: AppBar(
           title: Text("SEGUNDA RUTA"),
         ),
         body: Column(children: [
           for (var item in aUsuarios.aUsuarios) ...{
-            Text(item.email),
+            Card(
+              child: ListTile(
+                leading: Image.network(item.image),
+                trailing: Icon(Icons.add_box),
+                title: Text(item.name),
+                subtitle: Text(item.email),
+                isThreeLine: true,
+              ),
+            ),
           }
         ]));
   }
