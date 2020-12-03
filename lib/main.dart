@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Http App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.lightGreen,
         ),
         home: MyListScreen(),
       ),
@@ -58,6 +58,18 @@ class _MyListScreenState extends State {
     return Scaffold(
         appBar: AppBar(
           title: Text("User List"),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Pruebas()));
+            },
+            child: Container(
+              alignment: AlignmentDirectional.centerEnd,
+              child: Icon(
+                Icons.list, // add custom icons also
+              ),
+            ),
+          ),
         ),
         body: ListView.builder(
           itemCount: users.length,
@@ -103,22 +115,56 @@ class Pruebas2 extends State {
   Widget build(context) {
     final aUsuarios = Provider.of<ListaUsuarios>(context);
 
+    void _incrementCounter(int delta, User user) {
+      setState(() {
+        if (user.valor != 0) {
+          user.valor += delta;
+        } else {
+          aUsuarios.eliminarLista(user);
+        }
+      });
+    }
+
     return Scaffold(
         appBar: AppBar(
-          title: Text("SEGUNDA RUTA"),
+          title: Text("Lista de Clientes Favoritos"),
         ),
         body: Column(children: [
           for (var item in aUsuarios.aUsuarios) ...{
-            Card(
-              child: ListTile(
-                leading: Image.network(item.image),
-                trailing: Icon(Icons.add_box),
-                title: Text(item.name),
-                subtitle: Text(item.email),
-                isThreeLine: true,
+            Column(children: [
+              GestureDetector(
+                onTap: () {
+                  _irAlDetalle(item);
+                },
+                child: Card(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.network(item.image),
+                      Text(item.name + " " + item.email),
+                      IconButton(
+                          onPressed: () => _incrementCounter(1, item),
+                          icon: Icon(Icons.add),
+                          color: Colors.green),
+                      Text(item.valor.toString()),
+                      IconButton(
+                          onPressed: () => _incrementCounter(-1, item),
+                          icon: Icon(Icons.remove),
+                          color: Colors.red),
+                      Icon(Icons.remove_circle),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ])
           }
         ]));
+  }
+
+  void _irAlDetalle(User user) {
+    final aUsuarios = Provider.of<ListaUsuarios>(context, listen: false);
+
+    print(user);
+    aUsuarios.eliminarLista(user);
   }
 }

@@ -11,5 +11,10 @@ class ListaUsuarios extends ChangeNotifier {
     //print("----------- GUARDADO --------------");
   }
 
+  void eliminarLista(User user) {
+    aUsuarios.remove(user);
+    notifyListeners();
+  }
+
   notifyListeners();
 }
